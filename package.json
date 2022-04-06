@@ -1,0 +1,23 @@
+{
+  "name": "backgestion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -r esm ./"
+  },
+  "author": "JLGS",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^15.0.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.2",
+    "log4js": "^6.4.1",
+    "mongoose": "^6.1.9",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
+  }
+}
