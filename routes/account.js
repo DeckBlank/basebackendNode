@@ -2,9 +2,10 @@ import { Router } from "express";
 import { logger } from "../config/logger";
 import {  mgmtRolls } from "../db/mongodb/models";
 import { responseJson } from "../helpers";
-import {  createJWT, sendMail } from "../utils";
+import {  createJWT } from "../utils";
 import { passport } from "../auth";
 import { SECRET ,URL_VALIDATE_EMAIL} from "../config/enviroments";
+import { sendMail } from "../utils/services/sendGrid";
 const jwt = require('jsonwebtoken');
 
 export const account = Router();
