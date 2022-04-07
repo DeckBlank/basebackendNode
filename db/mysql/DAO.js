@@ -32,9 +32,5 @@ export class dbOperations {
     await this.collection.query(
       query,
       { type: QueryTypes.SELECT }
-      /*  , {
-    model: model,
-    mapToModel: true // pass true here if you have any mapped fields
-  } */
     );
 }
