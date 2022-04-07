@@ -2,6 +2,7 @@ const JWTstrategy = require("passport-jwt").Strategy;
 const localStrategy = require("passport-local").Strategy;
 import { ExtractJwt } from "passport-jwt";
 import { SECRET } from "../config/enviroments";
+import { logger } from "../config/logger";
 import { mgmtUser } from "../db/mongodb/models";
 import { isValidPassword } from "../utils";
 
@@ -14,13 +15,11 @@ export const localSignUp = new localStrategy(
   async (req,email, password, done) => {
     try {
       let {body } = req;
-      console.log(body);
       let {roles} = req.body;
       const user = await mgmtUser.createOne({data:{ email, password , roles }});
-      console.log('user',user);
       return done(null, user);
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       return done(null, false, { message: "User was not create!" });
     }
   }
@@ -31,10 +30,8 @@ export const localLogin = new localStrategy(
     usernameField: "email",
     passwordField: "password",
   },
-  async (email, password, done) => {
+  async (req, email, password, done) => {
     try {
-      console.log(email,
-        password);
       const user = await mgmtUser.findOne({ email });
       if (!user) {
         return done(null, false, { message: "User not found" });
