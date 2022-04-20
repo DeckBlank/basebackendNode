@@ -30,31 +30,3 @@ export const PuntoVenta = {
 };
 
 export const puntoVenta = new ModelMySQL(dbActivame, PuntoVenta);
-
-export const credencialesEmpresa = new ModelMySQL(
-  dbActivame,
-  CredencialesEmpresa
-  );
-  export const cuponesUtilizados = new ModelMySQL(dbActivame, CuponesUtilizados);
-  
-  export const TicketUtilizadoEmpresa = {
-    name: "ticketUtilizadoEmpresa",
-    schema: {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      giftcard: { type: DataTypes.STRING },
-      condicionesPlana: { type: DataTypes.STRING ,field: 'condicionesPlana'},
-    },
-    options: {
-      createdAt: false,
-      updatedAt: false,
-      deletedAt: false,
-      freezeTableName: true,
-      underscored: true,
-    },
-  };
-
-  export const ticketUtilizadoEmpresa = new ModelMySQL(dbValecart, TicketUtilizadoEmpresa);

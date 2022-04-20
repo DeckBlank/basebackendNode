@@ -4,12 +4,11 @@ export class dbOperations  {
       this.collection = collection;
     }
     raw = this.collection;
-      count = async ({query}) => await this.collection.countDocuments(query);
+     count = async ({query}) => await this.collection.countDocuments(query);
      findOne = async ({find,keys,options}) => await this.collection.findOne(find,keys,options);
-     find2 = async ({find,keys,options}) => await this.collection.find(find,keys,options);
+     find = async ({find,keys,options}) => await this.collection.find(find,keys,options);
      findOneById = async ({id}) => await this.collection.findOne({_id:ObjectId(id)});
      findAll = async () => await this.collection.find();
-     find = async ({find}) => await this.collection.find(find);
      createOne = async ({data}) => await this.collection.create(data);
      createMany = async ({data}) => await this.collection.insertMany(data);
      updateOneById = async ({data}) => await this.collection.updateOne({_id:data.id},{$set:data},{upsert:true});
