@@ -1,35 +1,58 @@
 import { Router } from "express";
 import { logger } from "../config/logger";
-import {  mgmtRolls } from "../db/mongodb/models";
-import { responseJson } from "../helpers";
-import {  createJWT } from "../utils";
+import { createJWT } from "../utils";
 import { passport } from "../auth";
-import { SECRET ,URL_VALIDATE_EMAIL} from "../config/enviroments";
-import { sendMail } from "../utils/services/sendGrid";
-const jwt = require('jsonwebtoken');
+const localStrategy = require("passport-local").Strategy;
+import { responseGenerator } from "../utils/responseGenerator";
+
 
 export const account = Router();
 const vertion = "v1";
 const prefix = "account";
 
-const globalMiddleware = [
-  (req, res, next) => {
-    next();
-  },
-];
-export const signIn = async ({ body, params, query, req, res, next }) => {
-  let token = await passport.authenticate("login", async (err, user, info) => {
-    if (err || !user) return res.status(401).json(info);
-    try {
-      const token = await createJWT(user);
-      return { token };
-    } catch (error) {
-      return null;
-    }
+
+const createTokenLogin = async ({ username, password }) => {
+  console.log({ username, password });
+  return responseGenerator({
+    data: {
+      token: await createJWT({
+      hola : 'mundo'  
+      })
+    },
   });
 };
 
-account.post(`/${vertion}/${prefix}`, [], (req, res, next) => {
+const loginCOntroller = new localStrategy(
+  {
+    usernameField: "username",
+    passwordField: "password",
+    passReqToCallback: true,
+  },
+  async (req, email, password, done) => {
+    try {
+      const response = await createTokenLogin(req.body);
+      return done(null, response);
+    } catch (error) {
+      logger.error(error);
+      return done(
+        null,
+        false,
+        responseGenerator({ status: "error", message: "User not found" })
+      );
+    }
+  }
+);
+passport.use("login", loginCOntroller);
+
+account.post(`/${vertion}/${prefix}`, [], async (req, res, next) => {
+  passport.authenticate("login", async (err, user, info) => {
+    if (err || !user) return res.status(401).json(info);
+    return res.json(user);
+  })(req, res, next);
+});
+
+
+account.post(`/${vertion}/${prefix}/login`, [], (req, res, next) => {
   passport.authenticate("login", async (err, user, info) => {
     if (err || !user) return res.status(401).json(info);
     try {
@@ -87,19 +110,3 @@ account.get(`/${vertion}/${prefix}/confirm-email`, [], async (req,res,next) => {
   let validateTokenConfirmEmailResp = await validateTokenConfirmEmail({body,params,query,req,res})
   return res.json(responseJson({data:validateTokenConfirmEmailResp}));
 });
-
-
-/* try {
-  let admin = mgmtRolls.createMany({
-    data:[{
-      name :'admin',
-      allowRoutes : [{
-        path : '/create/',
-        method : 'post'
-      }]
-    }]
-  })
-  console.log(admin);
-} catch (error) {
-  console.log(error);
-} */

@@ -1,23 +1,23 @@
+import { DataTypes } from "sequelize";
+import { dbActivame, dbValecart } from "..";
+import { ModelMySQL } from "./config";
 
-import {DataTypes}  from 'sequelize'
-import { dbMysql } from '..'
-import { ModelMySQL } from './config'
 export const PuntoVenta = {
   name: "punto_venta",
   schema: {
-    id_punto_venta :{
+    id_punto_venta: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
     nombre_codigo: { type: DataTypes.STRING },
-    sucursal : {
+    sucursal: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
-    id_empresa : {
+    id_empresa: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
   },
   options: {
@@ -25,10 +25,36 @@ export const PuntoVenta = {
     updatedAt: false,
     deletedAt: false,
     freezeTableName: true,
-    underscored: true
-  }
+    underscored: true,
+  },
+};
 
-}
+export const puntoVenta = new ModelMySQL(dbActivame, PuntoVenta);
 
+export const credencialesEmpresa = new ModelMySQL(
+  dbActivame,
+  CredencialesEmpresa
+  );
+  export const cuponesUtilizados = new ModelMySQL(dbActivame, CuponesUtilizados);
+  
+  export const TicketUtilizadoEmpresa = {
+    name: "ticketUtilizadoEmpresa",
+    schema: {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      giftcard: { type: DataTypes.STRING },
+      condicionesPlana: { type: DataTypes.STRING ,field: 'condicionesPlana'},
+    },
+    options: {
+      createdAt: false,
+      updatedAt: false,
+      deletedAt: false,
+      freezeTableName: true,
+      underscored: true,
+    },
+  };
 
-export const puntoVenta = new ModelMySQL (dbMysql,PuntoVenta)
+  export const ticketUtilizadoEmpresa = new ModelMySQL(dbValecart, TicketUtilizadoEmpresa);

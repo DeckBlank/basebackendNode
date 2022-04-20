@@ -9,7 +9,7 @@ import {
 import mongoose from "mongoose";
 import Sequelize from 'sequelize'
 
-export const db = ((base = { credentials: DB_BDG, ref: "DB_BDG" }) => {
+const mongoMongooseInitiator = (base) => {
   let { credentials, ref } = base;
   try {
     let connection = mongoose.createConnection(credentials, {
@@ -22,21 +22,16 @@ export const db = ((base = { credentials: DB_BDG, ref: "DB_BDG" }) => {
     logger.error(`An error: ${error}`);
     return null;
   }
-})();
-export const dbMysql = ((
-  base = {
-    user: MYSQL_USER,
-    password: MYSQL_PASSWORD,
-    host: MYSQL_HOST,
-    database: MYSQL_DATABASE,
-    ref: MYSQL_DATABASE,
-  }
-) => {
+}
+
+
+const mysqSequalizeInitiator = (base) => {
   let { user, password, host, database, ref } = base;
   try {
     let connection = new Sequelize(database, user, password, {
       host: host,
       dialect: "mysql",
+      logging: false
     });
     logger.info(`${ref} conected`);
     return connection;
@@ -44,4 +39,7 @@ export const dbMysql = ((
     logger.error(`An error: ${error}`);
     return null;
   }
-})();
+}
+
+
+export const db = mongoMongooseInitiator({ credentials: DB_BDG, ref: "DB_BDG" });

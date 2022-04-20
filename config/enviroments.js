@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config();
 export const {
+    API_VERTION,
     SECRET,
     API_KEY_EMAIL,
     EMAIL_SIGNIN,
@@ -20,5 +21,6 @@ export const {
     INTEGRATOR_ID,
     ACCESS_TOKEN,
     CUENTAS,
-    CONTACTO} = process.env;
+    CONTACTO,
+    PERMITIDOS} = process.env;
 

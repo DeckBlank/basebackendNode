@@ -1,19 +1,15 @@
-import { ObjectId } from "mongodb";
+const { Op , QueryTypes } = require("sequelize");
 export class dbOperations {
   constructor(collection) {
     this.collection = collection;
   }
-  raw = collection;
-  findOne = async (find) =>
-    await this.collection.findOne({
-      where: find,
-    });
-  findOne2 = async ({ where, attributes }) =>
+  raw = this.collection;
+  findOne = async ({ where, attributes }) =>
     await this.collection.findOne({
       where,
       attributes,
     });
-  find2 = async ({ where, attributes }) =>
+  find = async ({ where, attributes }) =>
     await this.collection.findAll({
       where,
       attributes,
@@ -24,13 +20,7 @@ export class dbOperations {
         [Op.or]: find,
       },
     });
-  find = async (find) =>
-    await this.collection.findAll({
-      where: find,
-    });
-  query = async (query, model) =>
-    await this.collection.query(
-      query,
-      { type: QueryTypes.SELECT }
-    );
+  selectQuery = async (query, model) =>
+    await this.collection.query(query, { type: QueryTypes.SELECT });
+  create = async ({ data }) => await this.collection.create(data);
 }
