@@ -1,7 +1,9 @@
 import cors from 'cors';
 import { PERMITIDOS } from './enviroments';
+import { logger } from './logger';
 
-export const whitelist = PERMITIDOS.split(' ')
+if(!PERMITIDOS) logger.error('You need add PERMITIDOS on enviroment!')
+export const whitelist = PERMITIDOS?PERMITIDOS.split(' '):[];
 const corsOptions = {
   origin: (origin, callback) => {
         if (whitelist.indexOf(origin) !== -1||origin === undefined) {

@@ -1,30 +1,27 @@
-import { Router } from "express";
-import { authMiddleware } from "../auth";
-import { logger } from "../config/logger";
-import { responseJson } from "../helpers";
+import { factoryOfRoutes } from "./factoryOfRoutes.js";
 
+const getLogin = async ({ body, params, query, tokenContent }) => {
+  let { page, limit, search } = query;
+  return {
+    message: "Login here!!!",
+    data: [
+      {
+        email: "email@domain.com",
+      },
+    ],
+  };
+};
 
-export const login = Router();
-const vertion = 'v1';
-const prefix = 'login';
+const calls = [
+  {
+    endPoint: "/v1/login",
+    callback: getLogin,
+    method: "post",
+    middlewares: [],
+    responseType: "json",
+  },
+];
 
-const globalMiddleware = [(req,res,next)=>{
-    if(req.path==='/v1/logi1n') return res.json({alv:'alv'}).status(402)
-    console.log(req.path);
-    next();
-}]
-export const loginGet = async ({body,params,query}) => {
-  try {
-    return 'algo';
-  } catch (error) {
-    logger.info(error);
-    return null;
-  }
-}
-
-login.get(`/${vertion}/${prefix}`,[...globalMiddleware],async (req,res)=>{
-    const {body,params,query} = req;
-    let loginGetResp = await loginGet({body,params,query})
-    return res.json(responseJson({data:loginGetResp}));
-})
-
+const vertion = "v1";
+const prefix = "login";
+export const login = factoryOfRoutes(calls, vertion, prefix);

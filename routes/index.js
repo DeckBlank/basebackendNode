@@ -3,9 +3,11 @@ import { validateToken } from "./validateToken"
 import { routesNotFound } from "./routesNotFound"
 import { mainHandleErrors } from "./mainHandleErros"
 import { testRouteError } from "./testRoutes"
+import { login } from "./login"
 
 export const routesNotProtectecByAuth = [
-    account
+    account,
+    login
 ]
 export const routesProtectecByAuth = [
     validateToken,
