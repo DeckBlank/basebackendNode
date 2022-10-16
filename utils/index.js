@@ -44,3 +44,11 @@ export const md5Encryption = (string) =>{
 export const md5Decryption = (string) =>{
     return MD5(string).toString();
 }
+export const validateCrypto = ({crypto,plainText})  => {
+    return new Promise ((resolve,reject) => {
+        bcrypt.compare(plainText, crypto, function(err, result) {
+            if(err) reject(false);
+            resolve(result);
+       });
+    })
+}

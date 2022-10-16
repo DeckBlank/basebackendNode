@@ -4,11 +4,12 @@ import { createJWT } from "../utils";
 import { passport } from "../auth";
 const localStrategy = require("passport-local").Strategy;
 import { responseGenerator } from "../utils/responseGenerator";
+import { factoryOfRoutes } from "./factoryOfRoutes";
+import { User } from "../core/User";
 
 
-export const account = Router();
-const vertion = "v1";
-const prefix = "account";
+//export const account = Router();
+
 
 
 const createTokenLogin = async ({ username, password }) => {
@@ -44,7 +45,7 @@ const loginCOntroller = new localStrategy(
 );
 passport.use("login", loginCOntroller);
 
-account.post(`/${vertion}/${prefix}`, [], async (req, res, next) => {
+/* account.post(`/${vertion}/${prefix}`, [], async (req, res, next) => {
   passport.authenticate("login", async (err, user, info) => {
     if (err || !user) return res.status(401).json(info);
     return res.json(user);
@@ -96,7 +97,7 @@ account.post(`/${vertion}/${prefix}/signup`,
       }
     )(req, res, next);
   }
-);
+); */
 
 const validateTokenConfirmEmail = async ({body,params,query,req,res})=>{
   let {token} = query;
@@ -105,8 +106,39 @@ const validateTokenConfirmEmail = async ({body,params,query,req,res})=>{
   return 'alv';
 }
 
-account.get(`/${vertion}/${prefix}/confirm-email`, [], async (req,res,next) => {
+/* account.get(`/${vertion}/${prefix}/confirm-email`, [], async (req,res,next) => {
   const {body,params,query} = req;
   let validateTokenConfirmEmailResp = await validateTokenConfirmEmail({body,params,query,req,res})
   return res.json(responseJson({data:validateTokenConfirmEmailResp}));
-});
+}); */
+
+const signUp = async ({body}) => {
+  const { password, email} = body;
+  return await User.sigUp({ password, email});
+}
+const signIn = async ({body}) => {
+  const { password, email} = body;
+  return {data:await User.sigIn({ password, email})}
+}
+
+
+const calls = [
+  {
+    endPoint: "/v1/account/sign-up",
+    callback: signUp,
+    method: "post",
+    middlewares: [],
+    responseType: "json",
+  },
+  {
+    endPoint: "/v1/account/sign-in",
+    callback: signIn,
+    method: "post",
+    middlewares: [],
+    responseType: "json",
+  },
+];
+
+const vertion = "v1";
+const prefix = "account";
+export const account = factoryOfRoutes(calls, vertion, prefix);
