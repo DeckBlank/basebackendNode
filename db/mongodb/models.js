@@ -1,40 +1,34 @@
 import { Schema } from "mongoose";
 import { db } from "..";
+import { Roles } from "../../core/Roles";
 import { Model } from "./config";
 const bcrypt = require('bcrypt');
 
 export const DBUser = {
-  collectionName: "caUser",
+  collectionName: "caUsers",
   schema: {
-    firstName: { type: String },
-    lastName: { type: String },
+    names: { type: String },
+    lastNames: { type: String },
     email: { type: String, unique: true },
     password: { type: String },
     roles : [{
-      type: Schema.Types.ObjectId,
-      ref: 'caRoles',
+      type: String,
+      enum: Roles.LIST_ROLES,
       required: true
     }],
-    emailConfirmed : {type:Boolean , default:false},
+    verifieldEmail : {type:Boolean , default:false},
     tokenForEmail : String,
-    facebookId: { type: String },
-    direcciones: [
-      {
-        _id: false,
-        direccion: String ,
-        main: Boolean
-      }
-    ]
+    ADterms : Boolean,
+    terms :Boolean
   },
   pre : [
     {
-      name : 'save',
-      function : async function(next) {
-        const hash = await bcrypt.hash(this.password, 10);
-        this.password = hash;
+      name: "save",
+      function: async function (next) {
+        this.password = this.password?(await bcrypt.hash(this.password, 10)):this.password;
         next();
-      }
-    }
+      },
+    },
   ]
 }
 

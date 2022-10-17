@@ -113,12 +113,10 @@ const validateTokenConfirmEmail = async ({body,params,query,req,res})=>{
 }); */
 
 const signUp = async ({body}) => {
-  const { password, email} = body;
-  return await User.sigUp({ password, email});
+  return {data:await User.sigUp(body)}
 }
 const signIn = async ({body}) => {
-  const { password, email} = body;
-  return {data:await User.sigIn({ password, email})}
+  return {data:await User.sigIn(body)}
 }
 
 
