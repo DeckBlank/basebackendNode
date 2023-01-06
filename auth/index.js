@@ -1,7 +1,6 @@
 import { APP_ENV, SECRET } from "../config/enviroments.js";
 
 import jwt from 'jsonwebtoken';
-import passport from "passport";
 
 const responseErrorJWT = (message)  => {
     switch (message) {
@@ -17,7 +16,7 @@ const responseErrorJWT = (message)  => {
 const authMiddleware = (req, res, next) => {
     const authHeader = req.headers['authorization']
     const token = authHeader?authHeader.split('Bearer ')[1]:undefined;
-    if (token == undefined) throw new Error("token-omited");
+    if (token == undefined) return next(new Error("token-omited"));
     try {
         req.tokenContent = jwt.verify(token, SECRET);
     } catch (error) {
@@ -28,7 +27,6 @@ const authMiddleware = (req, res, next) => {
 }
 
 export {
-    passport,
     authMiddleware,
     responseErrorJWT
 }

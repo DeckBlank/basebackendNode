@@ -24,6 +24,13 @@ const calls = [
     middlewares: [],
     responseType: "json",
   },
+  {
+    endPoint: "/v1/account",
+    callback: ()=>({data:'hello'}),
+    method: "get",
+    middlewares: [],
+    responseType: "json",
+  },
 ];
 
 const vertion = "v1";

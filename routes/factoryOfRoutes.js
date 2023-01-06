@@ -23,8 +23,8 @@ export const factoryOfRoutes = (calls, vertion, prefix) => {
       const { body, query, params, tokenContent } = req;
       try {
         let responseData = await callback({ body, query, params, tokenContent, req, res });
-        if(responseData.data instanceof Error) 
-          return res.json(responseGenerator({message:responseData.data.message}))
+        if(responseData instanceof Error) 
+          return res.json(responseGenerator({message:responseData.message}))
         return res[response](
           formatter?formatter(responseData):(responseData)
         );

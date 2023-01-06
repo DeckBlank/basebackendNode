@@ -2,11 +2,11 @@ import { logger } from "../config/logger.js"
 import { responseGenerator } from "../utils/responseGenerator.js"
 
 export const mainHandleErrors = (error, req, res, next) => {
-    logger.info("Error Handling Middleware called")
-    logger.info('Path: ', req.path)
-    logger.error('Error: ', error)
+    logger.error("Error Handling Middleware called")
+    logger.error('Path: ', req.path)
+    logger.error('Error: ', error.message)
 
-    switch (error.type) {
+    switch (error.message) {
         case 'no-data':
             res.status(408).json(responseGenerator({status:408,message:'the request not generated data'}));    
             break;
