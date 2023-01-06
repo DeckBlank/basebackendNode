@@ -1,5 +1,5 @@
+import { API_VERTION } from "../config/enviroments.js";
 import { Router } from "express";
-import { API_VERTION } from "../config/enviroments";
 
 export const testRouteError = Router();
 

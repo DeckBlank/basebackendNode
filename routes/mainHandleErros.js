@@ -1,5 +1,5 @@
-import { logger } from "../config/logger"
-import { responseGenerator } from "../utils/responseGenerator"
+import { logger } from "../config/logger.js"
+import { responseGenerator } from "../utils/responseGenerator.js"
 
 export const mainHandleErrors = (error, req, res, next) => {
     logger.info("Error Handling Middleware called")

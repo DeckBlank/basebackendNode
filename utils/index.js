@@ -1,7 +1,8 @@
+import MD5 from 'crypto-js/md5.js'
+import { SECRET } from '../config/enviroments.js';
 import bcrypt from 'bcrypt'
-import {  SECRET } from '../config/enviroments';
-import MD5 from 'crypto-js/md5'
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 export const isValidPassword = async function(user,password) {
     const compare = await bcrypt.compare(password, user.password);
@@ -19,7 +20,7 @@ export const checkAuthJWT = async (token) => {
     try {
         return await jwt.verify(token, SECRET);
     } catch (error) {
-        return null
+        return error
     }
 }
 
@@ -44,6 +45,7 @@ export const md5Encryption = (string) =>{
 export const md5Decryption = (string) =>{
     return MD5(string).toString();
 }
+
 export const validateCrypto = ({crypto,plainText})  => {
     return new Promise ((resolve,reject) => {
         bcrypt.compare(plainText, crypto, function(err, result) {
@@ -52,3 +54,13 @@ export const validateCrypto = ({crypto,plainText})  => {
        });
     })
 }
+
+export const convertTZ = (date, tzString = 'America/Lima') => {
+  return new Date(
+    (typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {
+      timeZone: tzString,
+    })
+  );
+};
+
+export const ObjectId = mongoose.Types.ObjectId

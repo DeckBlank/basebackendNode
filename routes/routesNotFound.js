@@ -1,4 +1,4 @@
-import { responseGenerator } from "../utils/responseGenerator";
+import { responseGenerator } from "../utils/responseGenerator.js";
 
 export const routesNotFound = (req,res) => {
     res.status(404);

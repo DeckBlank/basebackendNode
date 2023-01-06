@@ -1,13 +1,14 @@
-import { logger } from "./../config/logger.js";
 import {
   DB_BDG,
-  MYSQL_USER,
-  MYSQL_PASSWORD,
-  MYSQL_HOST,
   MYSQL_DATABASE,
-} from "../config/enviroments";
-import mongoose from "mongoose";
+  MYSQL_HOST,
+  MYSQL_PASSWORD,
+  MYSQL_USER,
+} from "../config/enviroments.js";
+
 import Sequelize from 'sequelize'
+import { logger } from "./../config/logger.js";
+import mongoose from "mongoose";
 
 const mongoMongooseInitiator = (base) => {
   let { credentials, ref } = base;

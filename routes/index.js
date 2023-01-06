@@ -1,13 +1,11 @@
-import { account } from "./account"
-import { validateToken } from "./validateToken"
-import { routesNotFound } from "./routesNotFound"
-import { mainHandleErrors } from "./mainHandleErros"
-import { testRouteError } from "./testRoutes"
-import { login } from "./login"
+import { account } from "./account.js"
+import { mainHandleErrors } from "./mainHandleErros.js"
+import { routesNotFound } from "./routesNotFound.js"
+import { testRouteError } from "./testRoutes.js"
+import { validateToken } from "./validateToken.js"
 
 export const routesNotProtectecByAuth = [
-    account,
-    login
+    account
 ]
 export const routesProtectecByAuth = [
     validateToken,

@@ -1,8 +1,7 @@
-import mongoose from 'mongoose'
-import { Schema } from 'mongoose'
-import { logger } from '../../config/logger.js'
 import { dbOperations } from './DAO.js';
+import pkg from 'mongoose';
 
+const { Schema } = pkg;
 export class Model extends dbOperations {
   constructor (connection,model){
     super();
@@ -21,5 +20,6 @@ export class Model extends dbOperations {
     this.collection = connection.model(
       collectionName, newSchema, collectionName
     );
+    this.collectionName = collectionName;
   } 
 }

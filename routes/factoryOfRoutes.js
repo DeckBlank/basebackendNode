@@ -14,6 +14,8 @@ export const factoryOfRoutes = (calls, vertion, prefix) => {
       expressHandler(method, endPoint, middlewares, callback, "json",responseGenerator),
     undefined: (method, endPoint, middlewares, callback) =>
       expressHandler(method, endPoint, middlewares, callback, "json",responseGenerator),
+    send: (method, endPoint, middlewares, callback) =>
+      expressHandler(method, endPoint, middlewares, callback, "send"),
   };
   const route = Router();
   const expressHandler = (method, endPoint, middlewares, callback, response,formatter) =>

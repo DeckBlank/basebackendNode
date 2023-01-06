@@ -1,10 +1,11 @@
 const JWTstrategy = require("passport-jwt").Strategy;
 const localStrategy = require("passport-local").Strategy;
+
 import { ExtractJwt } from "passport-jwt";
-import { SECRET } from "../config/enviroments";
+import { SECRET } from "../config/enviroments.js";
+import { isValidPassword } from "../utils";
 import { logger } from "../config/logger";
 import { mgmtUser } from "../db/mongodb/models";
-import { isValidPassword } from "../utils";
 
 export const localSignUp = new localStrategy(
   {

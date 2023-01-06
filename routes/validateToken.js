@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { responseGenerator } from "../utils/responseGenerator";
-
+import { responseGenerator } from "../utils/responseGenerator.js";
 
 export const validateToken = Router();
 const vertion = 'v1';

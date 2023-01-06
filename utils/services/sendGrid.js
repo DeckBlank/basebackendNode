@@ -1,5 +1,7 @@
+import { API_KEY_EMAIL, EMAIL_SIGNIN } from '../../config/enviroments.js';
+
 import {MailService} from '@sendgrid/mail'
-import { API_KEY_EMAIL, EMAIL_SIGNIN  } from '../../config/enviroments';
+import { logger } from '../../config/logger.js';
 
 const sgMail = new MailService();
 sgMail.setApiKey(API_KEY_EMAIL);
@@ -16,6 +18,7 @@ export const sendMail = ({email, key ,subject,text,html,from}) =>{
     try {
         return sgMail.send(msg)
     } catch (error) {
+        logger.error(error)
         return null;
     }
 }

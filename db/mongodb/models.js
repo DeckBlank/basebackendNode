@@ -1,8 +1,7 @@
-import { Schema } from "mongoose";
-import { db } from "..";
-import { Roles } from "../../core/Roles";
-import { Model } from "./config";
-const bcrypt = require('bcrypt');
+import { Model } from "./config.js";
+import { Roles } from "../../core/Roles.js";
+import bcrypt from "bcrypt";
+import { db } from "../index.js";
 
 export const DBUser = {
   collectionName: "caUsers",

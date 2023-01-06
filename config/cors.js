@@ -1,6 +1,6 @@
+import { PERMITIDOS } from './enviroments.js';
 import cors from 'cors';
-import { PERMITIDOS } from './enviroments';
-import { logger } from './logger';
+import { logger } from './logger.js';
 
 if(!PERMITIDOS) logger.error('You need add PERMITIDOS on enviroment!')
 export const whitelist = PERMITIDOS?PERMITIDOS.split(' '):[];
