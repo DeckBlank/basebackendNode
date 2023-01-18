@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "dev": "nodemon -r esm ./",
-    "dev2": "nodemon ./index.js",
+    "dev": "nodemon -r esm ./index.js",
     "start": "node -r esm ./"
   },
   "author": "JLGS",
