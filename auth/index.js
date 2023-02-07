@@ -14,9 +14,9 @@ const responseErrorJWT = (message)  => {
 }
 
 const authMiddleware = (req, res, next) => {
-    const authHeader = req.headers['authorization']
+    const authHeader = req.headers['authorization'];
     const token = authHeader?authHeader.split('Bearer ')[1]:undefined;
-    if (token == undefined) return next(new Error("token-omited"));
+    if (token == undefined) throw  Error("token-omited");
     try {
         req.tokenContent = jwt.verify(token, SECRET);
     } catch (error) {

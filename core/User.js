@@ -1,7 +1,10 @@
+import { MAILING_EMAIL_SIGNIN, MAILING_URL_VALIDATE_EMAIL, PROYECTO } from "../config/enviroments.js";
 import { createJWT, validateCrypto } from "../utils/index.js";
 
 import { Roles } from "./Roles.js";
 import { dbUser } from "../db/mongodb/models.js";
+import { recoveryTemplate } from "../utils/services/recoveryPasswordTemplate.js";
+import { sendMail } from "../utils/services/sendGrid.js";
 
 const createError = (message) => {
     return new Error(message);
@@ -28,16 +31,15 @@ export class User {
         const  {names,lastNames, roles} = user;
         return  {
             token,
-            user: true,
             names,
             lastNames,
             roles ,
             }
     }
     static async sigUp({names,lastNames,email,password,terms}){
-        if(!terms) return createError('Needs accept terms and conditions!');
+        if(!terms) throw Error('Needs accept terms and conditions!');
         let user = await dbUser.findOne({ find: { email } ,keys:['_id']});
-        if(user) return createError('User already registed!');
+        if(user) throw Error('User already registed!');
         const roles = [Roles.CUSTOMER_ROL];
         try {
             let tokenForEmail = await createJWT({ email,date: new Date() },'2h');
@@ -58,5 +60,19 @@ export class User {
             return error;
         }
 
+    }
+    static async recover({email}){
+        let user = await dbUser.findOne({ find: { email } ,keys:['names','lastNames']});
+        if(!user) throw Error('user not found');
+        const { names, lastNames,_id} = user;
+        const urlRecovery = `${MAILING_URL_VALIDATE_EMAIL}?t=${createJWT({_id},'1h')}`
+        sendMail({
+            email,
+            subject:'Recuperación de contraseña',
+            text:'Recuperación de contraseña',
+            html:recoveryTemplate({userName:`${names}, ${lastNames}`,urlRecovery,companyName:PROYECTO}),
+            from:MAILING_EMAIL_SIGNIN
+        })
+        return `Se envio un enlace a ${email} para la recuperación de la contraseña.`
     }
 }

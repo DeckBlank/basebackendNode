@@ -9,8 +9,9 @@ export const isValidPassword = async function(user,password) {
     return compare;
 }
 
-export const createJWT = async (body,expiresIn='2h')=>{
-    return jwt.sign({ body }, SECRET,
+export const createJWT = async (body,expiresIn='2h',secret)=>{
+    secret = SECRET||secret;
+    return jwt.sign({ body }, secret,
     {
         expiresIn,
     });

@@ -25,9 +25,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(helmet({ contentSecurityPolicy: (process.env.APP_ENV === 'development') ? false : undefined }));
 //uncoment to use it app.use(fileUpload());
-app.post('/',  (req,res) =>{
+/* app.post('/',  (req,res) =>{
     res.json(responseGenerator({data:['Hola mundo']}))
-})
+}) */
 
 
 app.use([
@@ -37,12 +37,13 @@ app.use([
     ...routesProtectecByAuth
 ]);
 
+app.use([
+    ...basicHandlers
+]);
 /* app.use('/graphql',graphqlHTTP({
     schema,
     rootValue,
     graphiql: APP_ENV==='development'?true:false
 })); */
 
-app.use([
-    ...basicHandlers
-]);
+

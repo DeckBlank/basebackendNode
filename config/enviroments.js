@@ -1,11 +1,12 @@
 import dotenv from 'dotenv'
+
 dotenv.config();
 export const {
     API_VERTION,
     SECRET,
-    API_KEY_EMAIL,
-    EMAIL_SIGNIN,
-    URL_VALIDATE_EMAIL,
+    MAILING_EMAIL_SIGNIN,
+    MAILING_API_KEY_EMAIL,
+    MAILING_URL_VALIDATE_EMAIL,
     PORT,
     DB_BDG,KEY,
     MYSQL_USER,

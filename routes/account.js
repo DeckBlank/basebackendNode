@@ -7,6 +7,10 @@ const signUp = async ({body}) => {
 const signIn = async ({body}) => {
   return {data:await User.sigIn(body)}
 }
+const recover = async ({body}) => {
+  const {email} = body;
+  return {message:await User.recover({email})}
+}
 
 
 const calls = [
@@ -25,12 +29,19 @@ const calls = [
     responseType: "json",
   },
   {
-    endPoint: "/v1/account",
-    callback: ()=>({data:'hello'}),
-    method: "get",
+    endPoint: "/v1/account/recover",
+    callback: recover,
+    method: "post",
     middlewares: [],
     responseType: "json",
   },
+  /* {
+    endPoint: "/v1/account",
+    callback: ({res})=>{res.status(200); return {data:'hello'}},
+    method: "get",
+    middlewares: [],
+    responseType: "json",
+  }, */
 ];
 
 const vertion = "v1";
