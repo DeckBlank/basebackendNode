@@ -1,4 +1,5 @@
 import { User } from "../core/User.js";
+import { checkAuthJWT } from "../utils/index.js";
 import { factoryOfRoutes } from "./factoryOfRoutes.js";
 
 const signUp = async ({body}) => {
@@ -8,8 +9,10 @@ const signIn = async ({body}) => {
   return {data:await User.sigIn(body)}
 }
 const recover = async ({body}) => {
-  const {email} = body;
-  return {message:await User.recover({email})}
+  return {message:await User.recover(body)}
+}
+const newCredentials = async ({body}) => {
+  return {message:await User.newCredentials(body)}
 }
 
 
@@ -35,13 +38,13 @@ const calls = [
     middlewares: [],
     responseType: "json",
   },
-  /* {
-    endPoint: "/v1/account",
-    callback: ({res})=>{res.status(200); return {data:'hello'}},
-    method: "get",
+  {
+    endPoint: "/v1/account/recover/new-credentials",
+    callback: newCredentials,
+    method: "post",
     middlewares: [],
     responseType: "json",
-  }, */
+  },
 ];
 
 const vertion = "v1";

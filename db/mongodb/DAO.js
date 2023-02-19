@@ -13,8 +13,8 @@ export class dbOperations  {
      createOne = async ({data}) => await this.collection.create(data);
      createMany = async ({data}) => await this.collection.insertMany(data);
      updateOneById = async ({data}) => await this.collection.updateOne({_id:data.id},{$set:data},{upsert:true});
-     updateOne = async ({query, update}) => await this.collection.updateOne(query,{$set:update},{upsert:true});
-     updateOne2 = async ({find, update,options}) => await this.collection.updateOne(find,update,options);
+     //updateOne = async ({query, update}) => await this.collection.updateOne(query,{$set:update},{upsert:true});
+     updateOne = async ({query, update,options}) => await this.collection.updateOne(query,update,options);
      updateOnePush = async ({query, push}) => await this.collection.updateOne(query,{$push:push});
      deleteOneById = async ({id}) => await this.collection.deleteOne({_id:ObjectId(id)});
      deleteOne = async ({data}) => await this.collection.deleteOne(data);

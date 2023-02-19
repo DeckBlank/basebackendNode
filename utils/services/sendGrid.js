@@ -5,7 +5,7 @@ import { logger } from '../../config/logger.js';
 
 const sgMail = new MailService();
 sgMail.setApiKey(MAILING_API_KEY_EMAIL);
-export const sendMail = ({email, key ,subject,text,html,from}) =>{
+export const sendMail = async ({email, key ,subject,text,html,from}) =>{
     if(key) sgMail.setApiKey(key)
     else sgMail.setApiKey(MAILING_API_KEY_EMAIL);
     const msg  = {
@@ -16,7 +16,7 @@ export const sendMail = ({email, key ,subject,text,html,from}) =>{
         html
     }
     try {
-        return sgMail.send(msg)
+        return await sgMail.send(msg)
     } catch (error) {
         logger.error(error)
         return null;

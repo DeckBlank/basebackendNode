@@ -1,4 +1,5 @@
 import {
+  APP_ENV,
   DB_BDG,
   MYSQL_DATABASE,
   MYSQL_HOST,
@@ -13,6 +14,7 @@ import mongoose from "mongoose";
 const mongoMongooseInitiator = (base) => {
   let { credentials, ref } = base;
   try {
+    if(APP_ENV!=='production') mongoose.set('debug', true);
     let connection = mongoose.createConnection(credentials, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

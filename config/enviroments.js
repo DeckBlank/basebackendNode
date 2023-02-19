@@ -4,6 +4,7 @@ dotenv.config();
 export const {
     API_VERTION,
     SECRET,
+    SECRET_RECOVERY_EMAIL,
     MAILING_EMAIL_SIGNIN,
     MAILING_API_KEY_EMAIL,
     MAILING_URL_VALIDATE_EMAIL,

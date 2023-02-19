@@ -1,5 +1,5 @@
-import { MAILING_EMAIL_SIGNIN, MAILING_URL_VALIDATE_EMAIL, PROYECTO } from "../config/enviroments.js";
-import { createJWT, validateCrypto } from "../utils/index.js";
+import { MAILING_EMAIL_SIGNIN, MAILING_URL_VALIDATE_EMAIL, PROYECTO, SECRET, SECRET_RECOVERY_EMAIL } from "../config/enviroments.js";
+import { checkAuthJWT, createJWT, validateCrypto } from "../utils/index.js";
 
 import { Roles } from "./Roles.js";
 import { dbUser } from "../db/mongodb/models.js";
@@ -27,7 +27,7 @@ export class User {
             error.message =  "Wrong Password";
             return error
         }  
-        let token = await createJWT({ hash: user._id,roles:user.roles });
+        let token = createJWT({ hash: user._id,roles:user.roles });
         const  {names,lastNames, roles} = user;
         return  {
             token,
@@ -42,7 +42,7 @@ export class User {
         if(user) throw Error('User already registed!');
         const roles = [Roles.CUSTOMER_ROL];
         try {
-            let tokenForEmail = await createJWT({ email,date: new Date() },'2h');
+            let tokenForEmail = createJWT({ email,date: new Date() },'2h');
             user = await dbUser.createOne({
                 data: {
                     names,
@@ -65,7 +65,8 @@ export class User {
         let user = await dbUser.findOne({ find: { email } ,keys:['names','lastNames']});
         if(!user) throw Error('user not found');
         const { names, lastNames,_id} = user;
-        const urlRecovery = `${MAILING_URL_VALIDATE_EMAIL}?t=${createJWT({_id},'1h')}`
+        const token = createJWT({_id},'1h',SECRET_RECOVERY_EMAIL);
+        const urlRecovery = `${MAILING_URL_VALIDATE_EMAIL}?t=${token}`
         sendMail({
             email,
             subject:'Recuperación de contraseña',
@@ -73,6 +74,23 @@ export class User {
             html:recoveryTemplate({userName:`${names}, ${lastNames}`,urlRecovery,companyName:PROYECTO}),
             from:MAILING_EMAIL_SIGNIN
         })
+        await dbUser.updateOne({
+            query:{email},
+            update:{$set:{tokenRecoverCredentials:token}}
+        })
         return `Se envio un enlace a ${email} para la recuperación de la contraseña.`
+    }
+    static async newCredentials({token,password}){
+        const { _id } = checkAuthJWT(token,SECRET_RECOVERY_EMAIL);
+        if(!_id) throw Error('Token invalid');
+        const user = await dbUser.findOne({ find: { _id } ,keys:['email','tokenRecoverCredentials']});
+        if(!user) throw Error('user not found');
+        if(user.tokenRecoverCredentials !== token) throw Error('Token invalid');
+        const { email } = user;
+        await dbUser.updateOne({
+            query:{_id},
+            update:{$set:{password,tokenRecoverCredentials:''}}
+        })
+        return await this.sigIn({email,password});
     }
 }

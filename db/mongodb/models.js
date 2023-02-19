@@ -17,6 +17,7 @@ export const DBUser = {
     }],
     verifieldEmail : {type:Boolean , default:false},
     tokenForEmail : String,
+    tokenRecoverCredentials : String,
     ADterms : Boolean,
     terms :Boolean
   },
@@ -26,6 +27,21 @@ export const DBUser = {
       function: async function (next) {
         this.password = this.password?(await bcrypt.hash(this.password, 10)):this.password;
         next();
+      },
+    },
+    {
+      name: "updateOne",
+      function: async function (next) {
+        const modifiedField = this.getUpdate().$set.password;
+        if (!modifiedField) {
+            return next();
+        }
+        try {
+            this.getUpdate().$set.password = await bcrypt.hash(modifiedField, 10);
+            next();
+        } catch (error) {
+            return next(error);
+        }
       },
     },
   ]
