@@ -1,6 +1,7 @@
 import { MAILING_EMAIL_SIGNIN, MAILING_URL_VALIDATE_EMAIL, PROYECTO, SECRET, SECRET_RECOVERY_EMAIL } from "../config/enviroments.js";
 import { checkAuthJWT, createJWT, validateCrypto } from "../utils/index.js";
 
+import { Google } from "./Google.js";
 import { Roles } from "./Roles.js";
 import { dbUser } from "../db/mongodb/models.js";
 import { recoveryTemplate } from "../utils/services/recoveryPasswordTemplate.js";
@@ -27,14 +28,27 @@ export class User {
             error.message =  "Wrong Password";
             return error
         }  
-        let token = createJWT({ hash: user._id,roles:user.roles });
         const  {names,lastNames, roles} = user;
-        return  {
-            token,
+        return  this.returnTokenSigIn({_id:user._id,names,lastNames,roles});
+    }
+    static returnTokenSigIn({_id,roles,names, lastNames}){
+        return {
+            token: createJWT({ hash: _id,roles }),
             names,
             lastNames,
-            roles ,
-            }
+        }
+    }
+    static async sigInGoogle({ token }) {
+        const { email, name, picture } = await Google.sigIn({ token });
+        let user = await dbUser.findOne({ find: { email } ,keys:['names','lastNames','roles']});
+        if (!user) {
+            const roles = [Roles.CUSTOMER_ROL];
+            user = await dbUser.createOne({
+                data: { email, name, picture, roles },
+            });
+        }
+        const  {names,lastNames, roles} = user;
+        return  this.returnTokenSigIn({_id:user._id,names,lastNames,roles});
     }
     static async sigUp({names,lastNames,email,password,terms}){
         if(!terms) throw Error('Needs accept terms and conditions!');

@@ -8,6 +8,9 @@ const signUp = async ({body}) => {
 const signIn = async ({body}) => {
   return {data:await User.sigIn(body)}
 }
+const signInGoogle = async ({body}) => {
+  return {data:await User.sigInGoogle(body)}
+}
 const recover = async ({body}) => {
   return {message:await User.recover(body)}
 }
@@ -27,6 +30,13 @@ const calls = [
   {
     endPoint: "/v1/account/sign-in",
     callback: signIn,
+    method: "post",
+    middlewares: [],
+    responseType: "json",
+  },
+  {
+    endPoint: "/v1/account/google/sign-in",
+    callback: signInGoogle,
     method: "post",
     middlewares: [],
     responseType: "json",
